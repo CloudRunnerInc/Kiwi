@@ -3,7 +3,7 @@ FROM centos:centos7
 RUN rpm -Uhv https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-12.noarch.rpm && \
     yum -y --setopt=tsflags=nodocs install centos-release-scl && \
     yum -y --setopt=tsflags=nodocs install rh-python36 gcc mariadb-devel mariadb \
-    libxml2-devel libxslt-devel httpd-devel mod_wsgi mod_ssl npm gettext && \
+    libxml2-devel libxslt-devel httpd-devel mod_wsgi npm gettext && \
     yum -y update --setopt=tsflags=nodocs && \
     yum clean all
 
@@ -13,8 +13,6 @@ CMD /usr/sbin/apachectl -DFOREGROUND
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf && \
     sed -i 's!ErrorLog "logs/error_log"!ErrorLog "|/bin/more"!' /etc/httpd/conf/httpd.conf && \
     sed -i 's!CustomLog "logs/access_log"!CustomLog "|/bin/more"!' /etc/httpd/conf/httpd.conf && \
-    sed -i 's!ErrorLog "logs/error_log"!ErrorLog "/dev/stderr"!' /etc/httpd/conf/httpd.conf && \
-    sed -i 's!CustomLog "logs/access_log"!CustomLog "/dev/stdout"!' /etc/httpd/conf/httpd.conf && \
     rm -rf /run/httpd && mkdir /run/httpd && chmod -R a+rwx /run/httpd
 COPY ./etc/kiwi-httpd.conf /etc/httpd/conf.d/
 
